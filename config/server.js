@@ -1,13 +1,10 @@
-const http = require('http');
-const port = process.env.PORT || 1337;
-
-const requestHandler = (req, res) => {
-  res.end('Server is running');
-};
-
-const server = http.createServer(requestHandler);
-
-// @ts-ignore
-server.listen(port, '0.0.0.0', () => {
-  console.log(`Server is listening on port ${port}`);
+module.exports = ({ env }) => ({
+  host: env('HOST', '0.0.0.0'),
+  port: parseInt(process.env.PORT, 10) || 1337, // Use Render's `PORT` or fallback to 1337 for local development
+  app: {
+    keys: env.array('APP_KEYS'),
+  },
+  webhooks: {
+    populateRelations: env.bool('WEBHOOKS_POPULATE_RELATIONS', false),
+  },
 });
